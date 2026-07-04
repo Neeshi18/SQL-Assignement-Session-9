@@ -1,0 +1,88 @@
+Use music_streaming_db;
+Create table influencers (
+    influencer_id INT PRIMARY KEY,
+    influencer_name VARCHAR(50),
+    city VARCHAR(50)
+);
+Create table brands (
+    brand_id INT PRIMARY KEY,
+    brand_name VARCHAR(50),
+    city VARCHAR(50)
+);
+INSERT INTO influencers VALUES
+(1, 'Riya', 'Mumbai'),
+(2, 'Arjun', 'Delhi'),
+(3, 'Neha', 'Pune');
+INSERT INTO brands VALUES
+(101, 'Nike', 'Delhi'),
+(102, 'Puma', 'Bangalore'),
+(103, 'Adidas', 'Mumbai');
+SELECT
+    i.influencer_name,
+    b.brand_name,
+    COALESCE(i.city, b.city) AS city
+FROM influencers i
+LEFT JOIN brands b
+ON i.city = b.city UNION 
+SELECT
+    i.influencer_name,
+    b.brand_name,
+    COALESCE(i.city, b.city) AS city
+FROM influencers i
+RIGHT JOIN brands b
+ON i.city = b.city;
+CREATE TABLE playlists (
+    id INT PRIMARY KEY,
+    playlist_name VARCHAR(50),
+    parent_playlist_id INT
+);
+INSERT INTO playlists VALUES
+(1, 'Workout', NULL),
+(2, 'Morning Workout', 1),
+(3, 'Cardio Mix', 2),
+(4, 'Chill Songs', NULL);
+SELECT
+    child.playlist_name AS Playlist,
+    parent.playlist_name AS Parent_Playlist
+FROM playlists child
+LEFT JOIN playlists parent
+ON child.parent_playlist_id = parent.id;
+Use food_delivery_db;
+CREATE TABLE offers (
+    offer_id INT PRIMARY KEY,
+    offer_title VARCHAR(100)
+);
+INSERT INTO offers VALUES
+(101, '10% Cashback'),
+(102, 'Free Shipping'),
+(103, 'Buy 1 Get 1');
+SELECT
+    u.user_name,
+    o.offer_title
+FROM users u
+CROSS JOIN offers o;
+#CROSS JOIN generates every possible combination of users and offers.
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    manager_id INT
+);
+INSERT INTO employees VALUES
+(1, 'John', NULL),
+(2, 'Alice', 1),
+(3, 'Bob', 1),
+(4, 'David', 2);
+SELECT
+    e.name AS Employee_Name,
+    m.name AS Manager_Name
+FROM employees e
+LEFT JOIN employees m
+ON e.manager_id = m.id;
+SELECT
+    u1.user_name AS User1,
+    u2.user_name AS User2,
+    u1.city
+FROM users u1
+JOIN users u2
+ON u1.city = u2.city
+AND u1.user_id < u2.user_id;
